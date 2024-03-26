@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, HStack, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react';
+import {Button, List, HStack, ListItem, Text, Heading, VStack, Modal, ModalBody, ModalCloseButton, ModalFooter, ModalOverlay, ModalContent, ModalHeader, useDisclosure } from "@chakra-ui/react";
 import { collection, doc, getDocs, deleteDoc } from "firebase/firestore";
 import { db } from './FirebaseConfig';
 import dayjs from 'dayjs';
-
-
+import { useNavigate } from 'react-router-dom';
+import ItemForm from './ItemForm';
+import ItemModal from './ItemModel';
 
 
 const MyList = () => {
@@ -12,9 +13,8 @@ const MyList = () => {
     // declaring and initiallizing my list state
     const [list, setList] = useState([]);
     
-    // setting date state 
-    const [remainingDays, setRemainingDays] = useState(0);
-
+    const navigate = useNavigate();
+    const { onOpen, onClose, isOpen } = useDisclosure()
     const getRemainingDays = (date)=>{
         const today = dayjs();
         const targetDate = dayjs(date);
@@ -39,6 +39,11 @@ const MyList = () => {
             console.log(error);
         }
     };
+
+    const handleUpdate = (docId)=> {
+        onOpen();
+        navigate('/', {state : {id : docId}}) 
+    }
 
     // receiving data from database and assining it to my list State
     useEffect(() => {
@@ -82,7 +87,7 @@ const deleteTodoItem = async (todoDeleteId) =>{
                             </Text>
 
                             <HStack>
-                                <Button colorScheme='teal'>
+                                <Button colorScheme='teal' onClick={()=> handleUpdate(doc.id)}>
                                     Update
                                 </Button>
 
@@ -96,6 +101,9 @@ const deleteTodoItem = async (todoDeleteId) =>{
             })}
 
         </List>
+
+        <ItemModal isOpen={isOpen} onClose={onClose} mode="update" />
+    
     </VStack>
   )
 }
