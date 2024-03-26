@@ -3,31 +3,31 @@ import {
   Divider,
   Heading,
   VStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalFooter,
-  ModalOverlay,
-  ModalContent,
   useDisclosure,
-  Input,
+  Spinner,
+  Box
 } from "@chakra-ui/react";
 import React from "react";
-import AddItem from "./AddItem";
 import { useNavigate } from "react-router-dom";
 import MyList from "./MyList";
-import ItemForm from "./ItemForm";
 import ItemModal from "./ItemModel";
+import useLoadingStore from "../Store/LoadingStore/LoadingStore";
+
 
 const Home = () => {
   const { onOpen, onClose, isOpen } = useDisclosure();
-  // const firstFieldRef = React.useRef(null)
+  const {loading, setLoading} = useLoadingStore();
   const navigate = useNavigate();
   const navigateToAdd = () => {
     navigate("/additem");
   };
   return (
     <VStack w="100%" justifyContent="center" p="20px">
+      {loading ? (
+        <VStack w='100%' h='100vh' justifyContent='center' alignItems='center'>
+          <Spinner size="xl" color="blue.500" />
+        </VStack>
+      ) : (
         <VStack
             w="80%"
             shadow="2xl"
@@ -47,6 +47,7 @@ const Home = () => {
 
             <MyList />
         </VStack>
+      )}
     </VStack>
 
   );

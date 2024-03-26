@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
-import AddItem from "./Components/AddItem";
 import MyList from "./Components/MyList";
-import UpdateItem from "./Components/UpdateItem";
+import ItemForm from "./Components/ItemForm";
 
 function App() {
   return (
@@ -10,9 +9,9 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" Component={Home} />
-          <Route path="/additem" Component={AddItem} />
+          <Route path="/additem" element={<ItemForm mode = 'add' />} />
           <Route path="/mylist" Component={MyList} />
-          <Route path="/updateitem" Component={UpdateItem} />
+          <Route path="/updateitem" element={<ItemForm mode = 'update' />} />
         </Routes>
       </Router>
     </>
